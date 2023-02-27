@@ -15,7 +15,7 @@ class Demand:
     def __init__(self):
         np.set_printoptions(suppress=True)
         config = configparser.ConfigParser()
-        config.read_file(open(r'config.ini'))
+        config.read_file(open(r'../config.ini'))
 
         data = {
             "jsonrpc": "2.0",

@@ -28,7 +28,7 @@ class History:
 
     def __init__(self):
         self.config = configparser.ConfigParser()
-        self.config.read_file(open(r"config.ini"))
+        self.config.read_file(open(r"../config.ini"))
         self.item_ids = json.load(open(r"hosts.json"))
         self.token = self.get_token()
         self.hosts = []
