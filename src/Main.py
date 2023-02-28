@@ -61,7 +61,7 @@ class Main:
     def update_cost(self, mhi_cost, smo_cost):
         # Update Cor
         cor = self.hosts_dict.get("cor")
-        cmd = f'vtysh -c "echo -e `conf t\nint {cor.interface_dict.get("mhi").get("interface_name")}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'
+        cmd = f'vtysh -c "echo -e `conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'
         # cmd = "hostname"
         self.exe_ssh_cmd(cor.ip, cmd)
 
@@ -93,7 +93,7 @@ class Main:
                 if destination == "id" or destination == "ip":
                     continue
 
-                interface = Interface(origin, destination, self.ITEM_IDS.get(origin).get(destination).get("id"))
+                interface = Interface(origin, destination, self.ITEM_IDS.get(origin).get(destination).get("id"), self.ITEM_IDS.get(origin).get(destination).get("interface_name"))
                 sent_request = requests.post(self.API_URL, json=self.create_json(
                     self.ITEM_IDS.get(origin).get(destination).get("sent")))
                 received_request = requests.post(self.API_URL, json=self.create_json(

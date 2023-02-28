@@ -4,9 +4,10 @@ import pandas as pd
 # This class represents the interface each host will have and allows for easy data manipulation.
 class Interface:
 
-    def __init__(self, source, destination, dest_id, description=""):
+    def __init__(self, source, destination, dest_id, interface_name, description=""):
         self.destination_id = dest_id
         self.description = description
+        self.interface_name = interface_name
         self.source = source
         self.destination = destination
         self.bits_sent = []
