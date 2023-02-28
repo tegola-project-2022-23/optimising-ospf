@@ -6,6 +6,7 @@ class Host:
         self.description = description
         self.interfaces = []
         self.interface_dict = {}
+        self.ip = None
 
     def add_interface(self, interface):
         self.interfaces.append(interface)
