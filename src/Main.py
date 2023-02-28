@@ -34,8 +34,6 @@ class Main:
         self.ITEM_IDS = json.load(open(r"hosts.json"))
         self.AUTH_TOKEN = request.json()["result"]
         self.SSH_PASSWORD = config.get("credentials", "ssh_password")
-        self.TELNET_PORT = int(config.get("config", "telnet_port"))
-        self.TELNET_TIMEOUT = int(config.get("config", "telnet_timeout"))
         self.API_URL = config.get("config", "api_url")
         self.hosts = []
         self.hosts_dict = {}
@@ -49,12 +47,41 @@ class Main:
         self.generate_demand_matrix()
         self.zabbix_cleanup()
 
+        self.update_cost()
+
     def get_current_ospf_cost(self):
         for host in self.hosts:
             ssh = paramiko.SSHClient()
             ssh.connect(host.ip, username="tegola", password=self.SSH_PASSWORD)
             ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("hostname")
-            print(ssh_stdout)
+            print(ssh_stdout.readlines())
+
+            ssh.close()
+
+    def update_cost(self):
+        # Update Cor
+        cor = self.hosts_dict.get("cor")
+        # cmd = 'vtysh -c "echo -e `show interface\nshow ip route`"'
+        cmd = "hostname"
+        self.exe_ssh_cmd(cor.ip, cmd)
+
+        ssh = self.hosts_dict.get("ssh")
+        cmd = "hostname"
+        self.exe_ssh_cmd(ssh.ip, cmd)
+
+        mhi = self.hosts_dict.get("mhi")
+        cmd = "hostname"
+        self.exe_ssh_cmd(mhi.ip, cmd)
+
+        smo = self.hosts_dict.get("smo")
+        cmd = "hostname"
+        self.exe_ssh_cmd(smo.ip, cmd)
+    def exe_ssh_cmd(self, ip, cmd):
+        ssh = paramiko.SSHClient()
+        ssh.connect(ip, username="tegola", password=self.SSH_PASSWORD)
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
+        print(ssh_stdout.readlines())
+        ssh.close()
 
     def get_zabbix_data(self):
         for origin in self.ITEM_IDS:
@@ -103,6 +130,17 @@ class Main:
 
         return data
 
+
+    # @staticmethod
+    # def update_cor_costs(host):
+    #     count = 0
+    #     while count < 10:
+    #
+    #
+    #
+    # def update_ssh_costs(self):
+    #     pass
+
     # IDs are as follows:
     # SSH: 0
     # COR: 1
@@ -115,8 +153,11 @@ class Main:
         for host in self.hosts:
             if host.host_id == 0 or host.host_id == 1:
                 for interface in host.interfaces:
-                    self.demand_matrix[interface.destination_id-2, host.host_id] = interface.get_average_bits_sent()
-                    interface_matrix[interface.destination_id-2][host.host_id] = f"{host.name} -> {interface.destination}"
+                    if interface.destination_id == 0:
+                        continue
+
+                    self.demand_matrix[host.host_id][interface.destination_id-2] = interface.get_average_bits_sent()
+                    interface_matrix[host.host_id][interface.destination_id-2] = f"{host.name} -> {interface.destination}"
 
         print(self.demand_matrix)
         print(interface_matrix)
