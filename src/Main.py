@@ -61,7 +61,7 @@ class Main:
     def update_cost(self, mhi_cost, smo_cost):
         # Update Cor
         cor = self.hosts_dict.get("cor")
-        cmd = f'vtysh -c "echo -e `conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'
+        cmd = f'vtysh -c $"echo -e `conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'
         # cmd = "hostname"
         self.exe_ssh_cmd(cor.ip, cmd)
 
