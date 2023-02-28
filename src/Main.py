@@ -47,7 +47,7 @@ class Main:
         self.generate_demand_matrix()
         self.zabbix_cleanup()
 
-        self.update_cost()
+        self.update_cost(25, 0)
 
     def get_current_ospf_cost(self):
         for host in self.hosts:
@@ -58,10 +58,10 @@ class Main:
 
             ssh.close()
 
-    def update_cost(self):
+    def update_cost(self, mhi_cost, smo_cost):
         # Update Cor
         cor = self.hosts_dict.get("cor")
-        # cmd = 'vtysh -c "echo -e `show interface\nshow ip route`"'
+        cmd = f'vtysh -c "echo -e `conf t\nint {cor.interface_dict.get("mhi").get("interface_name")}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'
         cmd = "hostname"
         self.exe_ssh_cmd(cor.ip, cmd)
 
@@ -76,8 +76,10 @@ class Main:
         smo = self.hosts_dict.get("smo")
         cmd = "hostname"
         self.exe_ssh_cmd(smo.ip, cmd)
+
     def exe_ssh_cmd(self, ip, cmd):
         ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(ip, username="tegola", password=self.SSH_PASSWORD)
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(cmd)
         print(ssh_stdout.readlines())
