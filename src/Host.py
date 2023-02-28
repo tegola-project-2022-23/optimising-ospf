@@ -1,12 +1,12 @@
 class Host:
 
-    def __init__(self, name, host_id, description=""):
+    def __init__(self, name, host_id, ip, description=""):
         self.host_id = host_id
         self.name = name
         self.description = description
         self.interfaces = []
         self.interface_dict = {}
-        self.ip = None
+        self.ip = ip
 
     def add_interface(self, interface):
         self.interfaces.append(interface)

@@ -1,28 +1,66 @@
 {
     "ssh": {
+        "ip": "192.168.0.251",
         "id": 0,
         "cor": {
+            "interface_name": "ens19",
             "id": 1,
             "sent": "45813",
             "received": "45645"
         },
         "smo": {
+            "interface_name": "ens20",
             "id": 2,
             "sent": "45814",
             "received": "45646"
         }
     },
     "cor": {
+        "ip": "192.168.0.252",
         "id": 1,
         "mhi": {
+            "interface_name": "ens19",
             "id": 3,
             "sent": "48811",
             "received": "48766"
         },
         "smo": {
+            "interface_name": "ens22",
             "id": 2,
             "sent": "48812",
             "received": "48767"
+        },
+        "ssh": {
+            "interface_name": "ens21",
+            "id": 0,
+            "sent": "48814",
+            "received": "48769"
+        }
+    },
+    "smo": {
+        "ip": "192.168.0.253",
+        "id": 2,
+        "ssh": {
+            "interface_name": "ens19",
+            "id": 0,
+            "sent": "47857",
+            "received": "47713"
+        },
+        "cor": {
+            "interface_name": "ens20",
+            "id": 1,
+            "sent": "47856",
+            "received": "47712"
+        }
+    },
+    "mhi": {
+        "ip": "192.168.0.254",
+        "id": 3,
+        "cor": {
+            "interface_name": "ens19",
+            "id": 1,
+            "sent": "47116",
+            "received": "47065"
         }
     }
 }
