@@ -47,7 +47,7 @@ class Main:
         self.generate_demand_matrix()
         self.zabbix_cleanup()
 
-        self.update_cost(25, 0)
+        self.update_cost(50, 0)
 
     def get_current_ospf_cost(self):
         for host in self.hosts:
@@ -64,7 +64,7 @@ class Main:
         # Update Cor
         cor = self.hosts_dict.get("cor")
 
-        router_cmd = f'''conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit\n'''
+        router_cmd = f'''conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit'''
         cmd = f'''vtysh -c "`echo -e '{router_cmd}'`"'''
         # cmd = f'''vtysh -c $"echo -e `conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'''
         # cmd = "hostname"
