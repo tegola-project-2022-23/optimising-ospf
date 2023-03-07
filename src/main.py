@@ -10,8 +10,6 @@ import telnetlib
 
 class Main:
 
-
-
     def __init__(self):
         np.set_printoptions(suppress=True)
         config = configparser.ConfigParser()
@@ -47,40 +45,31 @@ class Main:
         self.generate_demand_matrix()
         self.zabbix_cleanup()
 
-        self.update_cost(50, 0)
+        self.update_cost("cor", "mhi", 20)
 
-    def get_current_ospf_cost(self):
-        for host in self.hosts:
-            ssh = paramiko.SSHClient()
-            ssh.connect(host.ip, username="tegola", password=self.SSH_PASSWORD)
-            ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("hostname")
-            print(ssh_stdout.readlines())
-
-            ssh.close()
 
 
     # vtysh -c "`echo -e 'show interface\nshow ip route'`"
-    def update_cost(self, mhi_cost, smo_cost):
+    def update_cost(self, host, interface, cost):
         # Update Cor
-        cor = self.hosts_dict.get("cor")
+        router = self.hosts_dict.get(host)
 
-        router_cmd = f'''conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit'''
+        router_cmd = f'''conf t\nint {router.interface_dict.get(interface).interface_name}\nip ospf cost {cost}\nexit\nexit'''
         cmd = f'''vtysh -c "`echo -e '{router_cmd}'`"'''
-        # cmd = f'''vtysh -c $"echo -e `conf t\nint {cor.interface_dict.get("mhi").interface_name}\nip ospf cost {mhi_cost}\nexit\nexit\n`"'''
         # cmd = "hostname"
-        self.exe_ssh_cmd(cor.ip, cmd)
+        self.exe_ssh_cmd(router.ip, cmd)
 
-        ssh = self.hosts_dict.get("ssh")
-        cmd = "hostname"
-        self.exe_ssh_cmd(ssh.ip, cmd)
-
-        mhi = self.hosts_dict.get("mhi")
-        cmd = "hostname"
-        self.exe_ssh_cmd(mhi.ip, cmd)
-
-        smo = self.hosts_dict.get("smo")
-        cmd = "hostname"
-        self.exe_ssh_cmd(smo.ip, cmd)
+        # ssh = self.hosts_dict.get("ssh")
+        # cmd = "hostname"
+        # self.exe_ssh_cmd(ssh.ip, cmd)
+        #
+        # mhi = self.hosts_dict.get("mhi")
+        # cmd = "hostname"
+        # self.exe_ssh_cmd(mhi.ip, cmd)
+        #
+        # smo = self.hosts_dict.get("smo")
+        # cmd = "hostname"
+        # self.exe_ssh_cmd(smo.ip, cmd)
 
     def exe_ssh_cmd(self, ip, cmd):
         ssh = paramiko.SSHClient()
@@ -137,7 +126,6 @@ class Main:
 
         return data
 
-
     # @staticmethod
     # def update_cor_costs(host):
     #     count = 0
@@ -180,6 +168,15 @@ class Main:
 
         req = requests.post(self.API_URL, json=data)
         print(f"Logout: {req.json()['result']}")
+
+    def get_current_ospf_cost(self):
+        for host in self.hosts:
+            ssh = paramiko.SSHClient()
+            ssh.connect(host.ip, username="tegola", password=self.SSH_PASSWORD)
+            ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("hostname")
+            print(ssh_stdout.readlines())
+
+            ssh.close()
 
 
 if __name__ == "__main__":
