@@ -27,11 +27,29 @@ class Interface:
             "value": int(float(value))
         })
 
+    def add_bits_sent_data(self, timestamp, value):
+        self.bits_sent.append({
+            "timestamp": int(timestamp),
+            "value": int(float(value))
+        })
+
+    def add_bits_receive_data(self, timestamp, value):
+        self.bits_received.append({
+            "timestamp": int(timestamp),
+            "value": int(float(value))
+        })
+
     def get_sent_trend_as_df(self):
         return pd.DataFrame.from_records(self.trend_sent_data).sort_values(by=["timestamp"], ascending=False)
 
     def get_received_trend_as_df(self):
         return pd.DataFrame.from_records(self.trend_sent_data).sort_values(by=["timestamp"], ascending=False)
+
+    def get_sent_bits_as_df(self):
+        return pd.DataFrame.from_records(self.bits_sent).sort_values(by=["timestamp"], ascending=False)
+
+    def get_received_bits_as_df(self):
+        return pd.DataFrame.from_records(self.bits_received).sort_values(by=["timestamp"], ascending=False)
 
     def get_average_bits_sent(self):
         return sum(self.bits_sent) / len(self.bits_sent)

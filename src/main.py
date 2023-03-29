@@ -45,9 +45,9 @@ class Main:
         self.generate_demand_matrix()
         self.zabbix_cleanup()
 
-        self.update_cost("cor", "mhi", 20)
-
-
+        while True:
+            self.update_cost("cor", "mhi", 20)
+            break
 
     # vtysh -c "`echo -e 'show interface\nshow ip route'`"
     def update_cost(self, host, interface, cost):
