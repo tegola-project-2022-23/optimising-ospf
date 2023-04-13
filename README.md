@@ -5,7 +5,7 @@ This approach uses the existing OSPF protocol and by altering the link weights a
 ## Repository Architecture
 - `old-files` contains an archive of old files that contain more information than the current files used. 
 - `src` contains the pythons files intended to run the application. 
-  - `Demand.py` This calculates the demand matrix. 
+  - `main.py` This calculates the ospf optimisations to be applied to each router by interacting with Zabbix and the nodes itself.
   - `History.py` This is used to collect data to confirm that the existing setup is unbalanced.
   - `hosts.json` This contains a list of itemIDs that correspond to interfaces we are interested in by host.
   - `Interface.py` This is a helper class used to represent an interface on a given host.
@@ -19,19 +19,5 @@ This approach uses the existing OSPF protocol and by altering the link weights a
 
 #### Executing files
 Files within `testing-ipynb` are self-contained and can be run using PyCharm or similar Jupyter notebook interpreters.   
-`Demand.py` - This file can be executed using `python Demand.py` in the working directory of the `src` folder. Output of the program will be printed to console.  
+`main.py` - This file can be executed using `python main.py` in the working directory of the `src` folder. Output of the program will be printed to console.  
 `History.py` - This file can be executed using `python History.py` in the working directory of the `src` folder. Output of the program will be printed to console.  
-
-## Thesis Plan
-
-- Chapter 1 - Introduction
-  - The problem - unbalanced outbound traffic at gateways.
-  - The approach - reverse engineering ospf weights to achieve traffic engineering.
-- Chapter 2 - Background
-  - Tegola's history.
-- Chapter 3 - Motivation
-  - 
-- Chapter 4 - Implementation
-  - 
-- Chapter 5 - Analysis
-  - 
